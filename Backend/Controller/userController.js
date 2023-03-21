@@ -12,7 +12,7 @@ const Token=(user)=>{
 
 }
 
-const signIn=async(req,res,next)=>{
+const Register=async(req,res,next)=>{
 
     try{
 
@@ -118,5 +118,5 @@ const login=async(req,res,next)=>{
 }
 
 module.exports={
-    signIn,login
+    Register,login
 }
