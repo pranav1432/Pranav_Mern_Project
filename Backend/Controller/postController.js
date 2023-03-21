@@ -48,8 +48,70 @@ const createPost = async (req, res, next) => {
 
 }
 
+const like_and_unlike=async(req,res,next)=>{
+
+    try{ 
+
+        let post=await Post.findById(req.params.id);
+
+        if(!post)
+        {
+            return res.status(404).send({
+             success:false,
+             message:"Post Not Found"
+            })
+        }
+
+        if(post.likes.includes(req.user._id))
+        {
+
+            let index=post.likes.indexOf(req.user._id);
+
+            post.likes.splice(index,1); 
+
+            await post.save();
+
+            return res.status(201).send({
+                success:true,
+                message:"Post Unliked"
+            })
+
+        }
+        else{
+            post.likes.push(req.user._id);
+    
+            await post.save();
+            return res.status(201).send({
+                success:true,
+                message:"Post Liked"
+            })
+
+        }
+
+        
+          
+        
+        
+            
+
+        
+       
+
+        
+
+        
+
+    }catch(err){
+        res.status(500).send({
+          Success:false,
+          message:err.message
+        })
+    }
+
+}
+
 module.exports = {
 
-    createPost
+    createPost,like_and_unlike
 
 }
