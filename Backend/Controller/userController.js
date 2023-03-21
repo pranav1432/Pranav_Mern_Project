@@ -1,12 +1,12 @@
-const { USER } = require("../Models/userModel");
+const { User } = require("../Models/User");
 const bcrypt=require("bcryptjs");
 const jwt=require("jsonwebtoken")
 
 const Token=(user)=>{
 
-    let {_id,name,email}=user;
+    // let {_id,name,email}=user;
 
-   const token=jwt.sign({_id,name,email},"pranav122");
+   const token=jwt.sign({_id:user._id},"pranav122");
 
    return token;
 
@@ -18,7 +18,7 @@ const signIn=async(req,res,next)=>{
 
     let {name,email,password}=req.body;
 
-    let user=await USER.findOne({email});
+    let user=await User.findOne({email});
 
     if(user)
     {
@@ -30,13 +30,26 @@ const signIn=async(req,res,next)=>{
 
     password=bcrypt.hashSync(password);
 
-    user=await USER.create({name,email,password});
+    user=await User.create({name,email,password,avatar:{
 
-    return res.status(201).send({
+        public_id:"Sample_id",
+        url:"Sample url"
+
+    }});
+
+    const token=Token(user);
+
+    let options={expires:new Date(Date.now()+90*24*60*60*1000),httpOnly:true};
+    
+
+    return res.status(201).cookie("token",token,options).send({
         success:true,
         message:"Registration Successful",
+        token,
         user
     })
+
+     
 
 
     }
@@ -59,7 +72,7 @@ const login=async(req,res,next)=>{
 
     let {email,password}=req.body;
 
-    let user=await USER.findOne({email});
+    let user=await User.findOne({email});
 
     if(!user)
     {
@@ -81,12 +94,15 @@ const login=async(req,res,next)=>{
     }
 
     const token=Token(user);
+
+    let options={expires:new Date(Date.now()+90*24*60*60*1000),httpOnly:true};
     
 
-    return res.status(201).send({
+    return res.status(201).cookie("token",token,options).send({
         success:true,
         message:"Login Successful",
-        token
+        token,
+        user
     })
 
 }catch(err){
