@@ -103,15 +103,69 @@ const like_and_unlike=async(req,res,next)=>{
 
     }catch(err){
         res.status(500).send({
-          Success:false,
+          success:false,
           message:err.message
         })
     }
 
 }
 
+
+const delete_post=async(req,res,next)=>{
+
+    try{
+
+        let post=await Post.findById(req.params.id);
+
+        if(!post)
+        {
+            return res.status(404).send({
+                success:false,
+                message:"Post not found"
+            })
+        }
+    
+        if(post.owner.toString()!==req.user._id.toString())
+        {
+            return res.status(401).send({
+                success:false,
+                message:"Unauthorized"
+            })
+        }
+        else{
+
+         await post.deleteOne()
+    
+         let user=await User.findById(req.user._id);
+    
+           let index= user.posts.indexOf(req.params.id);
+    
+           user.posts.splice(index,1);
+    
+           await user.save();
+             
+            
+            
+            return res.status(201).send({
+                success:true,
+                message:"Post deleted"
+            })
+    
+        }
+
+    }
+    catch(err){
+        return res.status(500).send({
+            success:false,
+            message:err.message
+        })
+    }
+
+
+}
+
 module.exports = {
 
-    createPost,like_and_unlike
+    createPost,like_and_unlike,delete_post
 
 }
