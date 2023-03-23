@@ -232,8 +232,50 @@ const follow_unfollow=async(req,res,next)=>{
 
 }
 
+const add_comment=async(req,res,next)=>{
+
+    try{
+
+       let post =await Post.findById(req.params.id);
+
+       if(!post)
+       {
+        return res.status(404).send({
+            success:false,
+            message:"Post Not Found"
+        })
+
+       }
+
+       post.comments.push({
+        owner:req.user._id,
+        content:req.body.content
+
+       })
+
+       post.save();
+
+       return res.status(201).send({
+        success:true,
+        message:"Comment added Successfully"
+       })
+       
+
+    }catch(err){
+
+
+
+    }
+
+    
+
+
+
+
+}
+
 module.exports = {
 
-    createPost,like_and_unlike,delete_post,follow_unfollow
+    createPost,like_and_unlike,delete_post,follow_unfollow,add_comment
 
 }
