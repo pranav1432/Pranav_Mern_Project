@@ -138,7 +138,7 @@ const delete_post=async(req,res,next)=>{
     
          let user=await User.findById(req.user._id);
     
-           let index= user.posts.indexOf(req.params.id);
+           let index=user.posts.indexOf(req.params.id);
     
            user.posts.splice(index,1);
     
@@ -164,8 +164,76 @@ const delete_post=async(req,res,next)=>{
 
 }
 
+const follow_unfollow=async(req,res,next)=>{
+
+    try{
+
+
+    let followingto=await User.findById(req.params.id);
+
+    if(!followingto)
+    {
+        return res.status(404).send({
+            success:false,
+            message:"User Not Found"
+        })
+    }
+
+
+    let followedby=await User.findById(req.user._id);
+
+
+
+    if(followingto.followers.includes(followedby._id)){
+
+        let index=followingto.followers.indexOf(followedby._id);
+        followingto.followers.splice(index,1);
+       await followingto.save();
+
+        index=followedby.following.indexOf(followingto._id);
+        followedby.following.splice(index,1);
+       await  followedby.save();
+
+       return res.status(201).send({
+        success:true,
+         message:"User Unfollowed"
+       })
+
+    }
+    else{
+
+        followedby.following.push(followingto._id);
+        followingto.followers.push(followedby._id);
+   
+        await followingto.save();
+        await followedby.save();
+
+        return res.status(201).send({
+            success:true,
+             message:"User followed"
+           })
+        
+    }
+
+
+     
+
+    }catch(err){
+        return res.status(500).send({
+            success:false,
+            message:err.message
+        })
+    }
+
+
+    
+
+  
+
+}
+
 module.exports = {
 
-    createPost,like_and_unlike,delete_post
+    createPost,like_and_unlike,delete_post,follow_unfollow
 
 }

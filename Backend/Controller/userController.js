@@ -117,6 +117,114 @@ const login=async(req,res,next)=>{
 
 }
 
+
+const logged_out=async(req,res,next)=>{
+
+   try{
+
+    return res.status(200).cookie("token",null,{expires:new Date(Date.now()),httpOnly:true}).send({
+
+        success:true,
+        message:"Logged out"
+
+    })
+
+
+   }catch(err){
+
+    return res.status(500).send({
+        success:false,
+        message:err.message
+    })
+
+   }
+
+    
+
+}
+
+const update_password=async(req,res,next)=>{
+
+    try{
+
+        if(!old_password || !new_password)
+        {
+            return res.status(401).send({
+                success:false,
+                message:"Please Provide old password and new password"
+            })
+        }
+
+        let {old_password,new_password}=req.body;
+
+        let user=await User.findById(req.user._id);
+
+        if(!bcrypt.compareSync(old_password,user.password))
+        {
+
+            return res.status(401).send({
+                success:false,
+                message:"old password wrong"
+            })
+        }
+
+        let password_new=bcrypt.hashSync(new_password);
+
+        user.password=password_new;
+
+        user.save();
+
+        return res.status(201).send({
+            success:true,
+            message:"password updated successfully"
+        })
+
+
+    }catch(err){
+ 
+    return res.status(500).send({
+        success:false,
+        message:err.message
+    })
+
+    }
+
+   
+
+
+
+
+}
+const update_profile=async(req,res,next)=>{
+
+    try{
+
+        let {name,email}=req.body;
+
+        let user=await User.findById(req.user._id);
+
+        if(name){
+          user.name=name
+        }
+        if(password){
+            user.email=email
+        }
+        return res.status(201).send({
+            success:true,
+            message:"Profile Update Successfully"
+        })
+        
+
+    }catch(err){
+ 
+    return res.status(500).send({
+        success:false,
+        message:err.message
+    })
+
+    }
+}
+
 module.exports={
-    Register,login
+    Register,login,logged_out,update_password,update_profile
 }
