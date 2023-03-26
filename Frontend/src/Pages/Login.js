@@ -18,7 +18,7 @@ function Login() {
   const handleLogin = (event) => {
 
     event.preventDefault();
-    myAction(formData, dispatch);
+    
 
     login(formData).then((res) => {
 
@@ -42,10 +42,18 @@ function Login() {
 
       <FormControl>
         <FormLabel>Email address</FormLabel>
-        <Input type='email' placeholder='Please Enter Email address' />
+        <Input type='email' placeholder='Please Enter Email address'  onChange={(event)=>{
+
+        setFormData({...formData,email:event.target.value});
+
+        }}/>
         <FormLabel>Password</FormLabel>
-        <Input type='password' placeholder='Please Enter your password' />
-        <Button fontSize="20" colorScheme="#1877f2" marginTop={5} p='6' fontWeight="600" w="100%" bg="#1877f2">Log in</Button>
+        <Input type='password' placeholder='Please Enter your password' onChange={(event)=>{
+
+        setFormData({...formData,password:event.target.value});
+
+        }} />
+        <Button fontSize="20" colorScheme="#1877f2" onClick={handleLogin} marginTop={5} p='6' fontWeight="600" w="100%" bg="#1877f2">Log in</Button>
 
         <Text p="5">Forgot Password ?</Text>
 

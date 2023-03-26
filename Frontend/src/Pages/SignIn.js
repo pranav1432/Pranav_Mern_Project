@@ -9,7 +9,6 @@ function SignIn() {
     const [formData,setFormData]=useState({
         name:"",
         email:"",
-        age:"",
         password:""
     })
 
@@ -22,7 +21,8 @@ function SignIn() {
          
          signup(formData).then((res)=>{
 
-          if(res.user){
+          console.log(res);
+          if(res.success){
             alert("signup Successfull")
           }
           else{
@@ -42,17 +42,29 @@ function SignIn() {
 
       <FormControl>
       <FormLabel>Name</FormLabel>
-        <Input type='text' placeholder='Please Enter Your Name' />
+        <Input type='text' placeholder='Please Enter Your Name' onChange={(event)=>{
+
+         setFormData({...formData,name:event.target.value})
+
+        }} />
         <FormLabel>Email address</FormLabel>
-        <Input type='email' placeholder='Please Enter Email address' />
+        <Input type='email' placeholder='Please Enter Email address'  onChange={(event)=>{
+
+         setFormData({...formData,email:event.target.value})
+
+        }}/>
         <FormLabel>Password</FormLabel>
-        <Input type='password' placeholder='Please Enter your password' />
+        <Input type='password' placeholder='Please Enter your password'  onChange={(event)=>{
+
+         setFormData({...formData,password:event.target.value})
+
+        }}/>
 
 
         
 
 
-        <Button fontSize="20" colorScheme="#1877f2" marginTop={5} p='6' fontWeight="600" w="100%" bg="#1877f2">Sign up</Button>
+        <Button fontSize="20" onClick={handleForm} colorScheme="#1877f2" marginTop={5} p='6' fontWeight="600" w="100%" bg="#1877f2">Sign up</Button>
 
         <Text p="5">Forgot Password ?</Text>
 
