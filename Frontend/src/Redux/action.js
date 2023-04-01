@@ -12,3 +12,15 @@ export const myAction=(data,dispatch)=>{
 
 
 }
+
+export const login_and_signup_handler=(data,dispatch)=>{
+
+    return dispatch({
+
+      type:"LOGIN_SIGNUP_HANDLER",
+      Payload:data
+
+    })
+
+}
+

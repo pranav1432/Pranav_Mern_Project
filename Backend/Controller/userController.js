@@ -39,7 +39,7 @@
 
         const token=Token(user);
 
-        let options={expires:new Date(Date.now()+90*24*60*60*1000),httpOnly:true,sameSite:none};
+        let options={expires:new Date(Date.now()+90*24*60*60*1000),httpOnly:true};
         
 
         return res.status(201).cookie("token",token,options).send({

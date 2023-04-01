@@ -1,10 +1,12 @@
 import { Box, Button, FormControl, FormHelperText, FormLabel, Input, Text } from '@chakra-ui/react'
 import React from 'react'
+import { useSelector } from 'react-redux'
 import "../Pages/Home.css"
 import Login from './Login'
 import SignIn from './SignIn'
 function Home() {
 
+    let value=useSelector((storeData)=>storeData.login_signup_handler);
 
     return (
         <Box className="parent">
@@ -19,7 +21,7 @@ function Home() {
 
                 <Box className="parent_form">
 
-                    <SignIn/>
+                    {value?<SignIn/>:<Login/>}
                   
                 </Box>  
 
