@@ -273,9 +273,38 @@ const add_comment=async(req,res,next)=>{
 
 
 }
+const getAllPosts=async(req,res,next)=>{
+
+    try{
+
+        let post=await Post.find().populate("owner");
+
+        if(!post)
+        {
+            return res.status(404).send({
+                success:false,
+                message:"Post not found"
+            })
+        }  
+            
+            return res.status(201).send({
+                success:true,
+                post
+            })
+    
+        }catch(err){
+        return res.status(500).send({
+            success:false,
+            message:err.message
+        })
+    }
+
+
+}
+
 
 module.exports = {
 
-    createPost,like_and_unlike,delete_post,follow_unfollow,add_comment
+    createPost,like_and_unlike,delete_post,follow_unfollow,add_comment,getAllPosts
 
 }

@@ -4,6 +4,7 @@ import { signup } from '../Api/authentication';
 import { Box, Button, FormControl, FormHelperText, FormLabel, Input, Text } from '@chakra-ui/react'
 import { login_and_signup_handler } from '../Redux/action';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 
 function SignIn() {
@@ -15,8 +16,8 @@ function SignIn() {
     })
 
     let dispatch=useDispatch();
+    let navigate=useNavigate();
 
-    
 
 
     const handleForm=(event)=>{
@@ -30,6 +31,8 @@ function SignIn() {
           console.log(res);
           if(res.token){
             alert(res.message)
+            localStorage.setItem("token",res.token);
+            navigate("/posts");
           }
           else{
             console.log(res.message);

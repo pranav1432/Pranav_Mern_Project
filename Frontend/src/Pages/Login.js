@@ -30,9 +30,7 @@ function Login() {
         alert(res.message)
       }
 
-
     })
-
 
   }
 

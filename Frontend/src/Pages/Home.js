@@ -1,7 +1,7 @@
 import { Box, Button, FormControl, FormHelperText, FormLabel, Input, Text } from '@chakra-ui/react'
 import React from 'react'
 import { useSelector } from 'react-redux'
-import "../Pages/Home.css"
+import "./Home.css"
 import Login from './Login'
 import SignIn from './SignIn'
 function Home() {
